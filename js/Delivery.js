@@ -6,16 +6,16 @@ export default class Delivery {
         this.address = address
         this.distance = distance
     }
-    getCardElement() {
-        this.cardEl = document.createElement('div')
-        this.cardEl.classList.add('card')
 
-        const titleNameEl = this.getTitleElement('Имя', 'card__title')
-        this.textNameEl = this.getTitleElement(this.name, 'card__text')
-        const titleAddressEl = this.getTitleElement('Адрес', 'card__title')
-        this.textAddressEl = this.getTitleElement(this.address, 'card__text')
-        const titleDistanceEl = this.getTitleElement('Расстояние', 'card__title')
-        this.textDistanceEl = this.getTitleElement(`${this.distance} км`, 'card__text')
+    getCardElement() {
+        this.cardEl = components.createEl('div', 'card')
+
+        const titleNameEl = components.createEl('p', 'card__title', 'Имя')
+        this.textNameEl = components.createEl('p', 'card__text', this.name)
+        const titleAddressEl = components.createEl('p', 'card__title', 'Адрес')
+        this.textAddressEl = components.createEl('p', 'card__text', this.address)
+        const titleDistanceEl = components.createEl('p', 'card__title', 'Расстояние')
+        this.textDistanceEl = components.createEl('p', 'card__text', `${this.distance} км`)
 
         this.cardEl.append(
             titleNameEl,
@@ -29,11 +29,40 @@ export default class Delivery {
         return this.cardEl
     }
 
-    getTitleElement(text, className) {
-        const textEl = document.createElement('p')
-        textEl.classList.add(className)
-        textEl.textContent = text
-        return textEl
+    set name(value) {
+        this._name = value
+
+        if (this.textNameEl) {
+            this.textNameEl.textContent = this._name
+        }
+    }
+
+    get name() {
+        return this._name
+    }
+
+    set address(value) {
+        this._address = value
+
+        if (this.textAddressEl) {
+            this.textAddressEl.textContent = this._address
+        }
+    }
+
+    get address() {
+        return this._address
+    }
+
+    set distance(value) {
+        this._distance = value
+
+        if (this.textDistanceEl) {
+            this.textDistanceEl.textContent = this._distance
+        }
+    }
+
+    get distance() {
+        return this._distance
     }
 
 }

@@ -1,3 +1,4 @@
+
 // Функция создания DOM элементов
 function createEl(el, className = 'x', text = '') {
   const element = document.createElement(el);
