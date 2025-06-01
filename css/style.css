@@ -10,7 +10,7 @@ html {
 
 body {
     font-family: Arial, Helvetica, sans-serif;
-    background-color: rgb(169, 204, 192);
+    background-color: rgb(206, 207, 206);
 }
 
 img {
@@ -35,15 +35,15 @@ img {
     width: calc((100% / 3) - 20px);
     padding: 15px;
     background-color: white;
-    border-radius: 8px;
+    border-radius: 10px;
 }
 
 .card.delivered {
-    border: 1px solid rgb(5, 71, 5);
+    border: 5px solid rgb(50, 177, 50);
 }
 
 .card.canceled {
-    border: 1px solid rgb(137, 54, 32);
+    border: 5px solid rgb(189, 102, 78);
 }
 
 .card__title {
@@ -90,18 +90,14 @@ img {
     transition: opacity .3s ease-in-out, visibility .3s ease-in-out;
 }
 
-.modal__wrapper {
-    margin: auto;
-    max-width: 800px;
-    min-height: 400px;
-}
-
-.modal__form-wapper {
+.modal__form-wrapper {
     position: relative;
     width: 100%;
     padding: 25px 30px;
     border-radius: 8px;
     background-color: white;
+    margin: auto;
+    max-width: 300px;
 }
 
 .form {

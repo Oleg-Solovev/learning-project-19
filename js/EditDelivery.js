@@ -1,73 +1,52 @@
 import * as components from "./components.js"
+import Delivery from './Delivery.js'
 
-export default class Delivery {
-    _addStatus = 'delivery'
-    constructor(name, address, distance = 0) {
-        this.name = name
-        this.address = address
-        this.distance = distance
+export default class EditDelivery extends Delivery {
+    constructor(name, address, distance = 0, addStatus = 'delivery') {
+        super(name, address, distance)
+        this.addStatus = addStatus
     }
 
     getCardElement() {
-        this.cardEl = document.createElement('div')
-        this.cardEl.classList.add('card')
 
-        const titleNameEl = this.getTitleElement('Имя', 'card__title')
-        this.textNameEl = this.getTitleElement(this.name, 'card__text')
-        const titleAddressEl = this.getTitleElement('Адрес', 'card__title')
-        this.textAddressEl = this.getTitleElement(this.address, 'card__text')
-        const titleDistanceEl = this.getTitleElement('Расстояние', 'card__title')
-        this.textDistanceEl = this.getTitleElement(`${this.distance} км`, 'card__text')
-        this.btnEl = this.getButtonElement()
+        this.getCardElement = super.getCardElement()
 
-        this.cardEl.append(
-            titleNameEl,
-            this.textNameEl,
-            titleAddressEl,
-            this.textAddressEl,
-            titleDistanceEl,
-            this.textDistanceEl,
-            this.btnEl
-        )
+        this.btnEl = components.createEl('button', 'card__btn', 'Изменить')
+        this.btnEl.addEventListener('click', () => this.modalWindow())
+        this.cardEl.append(this.btnEl)
+
+        if (this.addStatus === 'delivered') {
+            this.cardEl.classList.add('delivered')
+        }
+        if (this.addStatus === 'canceled') {
+            this.cardEl.classList.add('canceled')
+        }
 
         return this.cardEl
     }
 
-    getTitleElement(text, className) {
-        const textEl = document.createElement('p')
-        textEl.classList.add(className)
-        textEl.textContent = text
-        return textEl
-    }
-
-    getButtonElement() {
-        const btnEl = document.createElement('button')
-        btnEl.classList.add('card__btn')
-        btnEl.textContent = 'Изменить'
-        btnEl.addEventListener('click', this.modalWindow)
-        return btnEl
-    }
-
     modalWindow() {
         const modalParent = components.createEl('div', 'modal__parent')
-        const modalWrapper = components.createEl('div', 'modal__wrapper')
-        const modalFormWrapper = components.createEl('div', 'modal__form-wapper')
+        const modalFormWrapper = components.createEl('div', 'modal__form-wrapper')
         modalFormWrapper.autocomplete = 'off'
         const btnModalReset = components.createEl('button', 'btn-modal-reset', 'x')
         const modalTitle = components.createEl('h2', 'modal__title')
         modalTitle.textContent = 'Изменить'
 
         modalFormWrapper.append(btnModalReset, modalTitle)
-        modalWrapper.append(modalFormWrapper)
-        modalParent.append(modalWrapper)
+        modalParent.append(modalFormWrapper)
         app.append(modalParent)
         const modalForm = components.createEl('form', 'form')
         modalForm.id = 'form'
         const nameInpEl = components.getInputEl("text", 'name', 'Имя')
+        nameInpEl.value = this.name
         const adressInpEl = components.getInputEl("text", "adress", "Адрес")
+        adressInpEl.value = this.address
         const distanceInpEl = components.getInputEl("text", "distance", "Расстояние")
+        distanceInpEl.value = this.distance
         const saveClientBtn = components.createEl('button', 'form__submit', 'Сохранить')
         saveClientBtn.type = 'submit'
+
         const statusArr = [
             {
                 status: 'delivery',
@@ -83,13 +62,13 @@ export default class Delivery {
             },
         ]
         const statusSelectEl = components.createEl('select', 'form__select')
-        statusArr.forEach((status) => {
-            const optionEl = components.createEl('option', 'form__option', status.name)
-            optionEl.value = status.status
+        statusSelectEl.name = 'status'
+        statusArr.forEach((el) => {
+            const optionEl = components.createEl('option', 'form__option', el.name)
+            optionEl.value = el.status
             statusSelectEl.append(optionEl)
         })
-        console.log(this.status)
-        statusSelectEl.value = this.status
+        statusSelectEl.value = this.addStatus
 
         modalForm.append(nameInpEl, adressInpEl, distanceInpEl, statusSelectEl, saveClientBtn)
         modalFormWrapper.append(modalForm)
@@ -100,22 +79,42 @@ export default class Delivery {
 
         saveClientBtn.addEventListener('click', (e) => {
             e.preventDefault()
-            console.log(nameInpEl.value)
-            this.name = nameInpEl.value
-            // не изменяется имя
-            modalParent.remove()
 
+            this.name = nameInpEl.value
+            this.address = adressInpEl.value
+            this.distance = `${distanceInpEl.value} км`
+            this.addStatus = statusSelectEl.value
+
+
+            this.cardEl.classList.remove('delivered')
+            this.cardEl.classList.remove('canceled')
+            if (this.addStatus === 'delivered') {
+                this.cardEl.classList.add('delivered')
+            }
+            if (this.addStatus === 'canceled') {
+                this.cardEl.classList.add('canceled')
+            }
+
+            modalParent.remove()
+            return this.cardEl
         })
     }
 
-    setStatus(value) {
+    set addStatus(value) {
+
         this._addStatus = value
-        if (this._addStatus === 'delivered') {
-            console.log(this.cardEl)
-            this.cardEl.classList.add('delivered')
-        } if (this._addStatus === 'canceled') {
-            this.cardEl.classList.add('canceled')
+        if (this.statusSelectEl) {
+            this.statusSelectEl.textContent = this._addStatus
         }
+
+    }
+
+    get addStatus() {
+        return this._addStatus
+    }
+
+    getTotalDistance(arr) {
+
     }
 
 }
