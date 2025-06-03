@@ -82,9 +82,9 @@ export default class EditDelivery extends Delivery {
 
             this.name = nameInpEl.value
             this.address = adressInpEl.value
-            this.distance = `${distanceInpEl.value} км`
+            this.distance = +(distanceInpEl.value)
+            this.textDistanceEl.textContent = `${this.distance} км`
             this.addStatus = statusSelectEl.value
-
 
             this.cardEl.classList.remove('delivered')
             this.cardEl.classList.remove('canceled')
@@ -113,8 +113,11 @@ export default class EditDelivery extends Delivery {
         return this._addStatus
     }
 
-    getTotalDistance(arr) {
-
+    static getTotalDistance(arr) {
+        let summ = 0
+        arr
+            .filter((i) => (i.addStatus !== "canceled"))
+            .map((i) => summ += i.distance)
+        return summ
     }
-
 }
